@@ -16,6 +16,8 @@ text_rotation = wikipedia.page('Solar rotation').\
 
 img_today = get_img(datetime.date.today())
 
+path = os.path.dirname(os.path.realpath(__file__))
+
 @app.route("/")
 def index():
     return render_template("index.html", text=text_sunspot)
@@ -35,13 +37,14 @@ def rotation():
     form = DateForm(year=date.year, month=date.month, day=date.day,
                     weeks=weeks)
     gifname = str(date) + "_" + str(weeks) + ".gif"
-    if not os.path.isfile(os.path.join("static", gifname)):
+    giffile = os.path.join(path, "static", gifname)
+    if not os.path.isfile(giffile):
         cmd = "convert -delay 50 "
         for d in range(-7*weeks, 1):
             img = get_img(date + datetime.timedelta(d))
             if img:
                 cmd += img + " "
-        cmd += "-loop 0 static/"+gifname
+        cmd += "-loop 0 "+giffile
         os.system(cmd)
 
     return render_template("rotation.html", text=text_rotation, form=form,
