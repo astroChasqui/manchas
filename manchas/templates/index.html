@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Manchas</h1>
+
+<p class="lead">View and study photographs of our Sun and its spots.</p>
+
+<blockquote>
+  {% for par in text %}
+    <p>{{ par }}</p>
+  {% endfor %}
+  <footer><cite>Wikipedia</cite></footer>
+</blockquote>
+
+{% endblock %}
