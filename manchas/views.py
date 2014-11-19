@@ -2,9 +2,12 @@ from flask import Flask, render_template
 import wikipedia
 import datetime
 from functions import *
+from forms import DateForm
+import os
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'sunspots'
 
 text_sunspot = wikipedia.summary('Sunspot').split('\n')
 text_cycle = wikipedia.summary('Solar cycle').split('\n')
@@ -25,6 +28,21 @@ def today():
 def cycle():
     return render_template("cycle.html", text=text_cycle)
 
-@app.route("/rotation")
+@app.route("/rotation", methods=['GET', 'POST'])
 def rotation():
-    return render_template("rotation.html", text=text_rotation)
+    date = datetime.date.today()
+    weeks = 2
+    form = DateForm(year=date.year, month=date.month, day=date.day,
+                    weeks=weeks)
+    gifname = str(date) + "_" + str(weeks) + ".gif"
+    if not os.path.isfile(os.path.join("static", gifname)):
+        cmd = "convert -delay 50 "
+        for d in range(-7*weeks, 1):
+            img = get_img(date + datetime.timedelta(d))
+            if img:
+                cmd += img + " "
+        cmd += "-loop 0 static/"+gifname
+        os.system(cmd)
+
+    return render_template("rotation.html", text=text_rotation, form=form,
+                           gifname=gifname)
