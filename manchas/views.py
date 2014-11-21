@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session, redirect, url_for
 import wikipedia
 import datetime
 from functions import *
@@ -32,20 +32,33 @@ def cycle():
 
 @app.route("/rotation", methods=['GET', 'POST'])
 def rotation():
-    date = datetime.date.today()
-    weeks = 2
+    if not session.get('date'):
+        date, weeks = datetime.date(2014, 10, 30), 1
+    else:
+        date = datetime.date.fromordinal(session.get('date'))
+        weeks = session.get('weeks')
     form = DateForm(year=date.year, month=date.month, day=date.day,
                     weeks=weeks)
-    gifname = str(date) + "_" + str(weeks) + ".gif"
-    giffile = os.path.join(path, "static", gifname)
-    if not os.path.isfile(giffile):
-        cmd = "convert -delay 50 "
-        for d in range(-7*weeks, 1):
-            img = get_img(date + datetime.timedelta(d))
-            if img:
-                cmd += img + " "
-        cmd += "-loop 0 "+giffile
-        os.system(cmd)
-
-    return render_template("rotation.html", text=text_rotation, form=form,
-                           gifname=gifname)
+    if request.method == 'POST':
+        try:
+            date = datetime.date(form.year.data,
+                                 form.month.data,
+                                 form.day.data)
+            session['date'] = date.toordinal()
+            session['weeks'] = form.weeks.data
+        except:
+            date = session['date'] = None
+        return redirect(url_for('rotation'))
+    else:
+        gifname = str(date) + "_" + str(weeks) + ".gif"
+        giffile = os.path.join(path, "static", gifname)
+        if not os.path.isfile(giffile):
+            cmd = "convert -delay 50 "
+            for d in range(-7*weeks, 1):
+                img = get_img(date + datetime.timedelta(d))
+                if img:
+                    cmd += img + " "
+            cmd += "-loop 0 "+giffile
+            os.system(cmd)
+        return render_template("rotation.html", text=text_rotation,
+                               form=form, gifname=gifname)

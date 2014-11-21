@@ -10,5 +10,5 @@ class DateForm(Form):
     day = SelectField(choices = [(x, x) for x in range(1, 31+1)],
                       coerce=int)
     weeks = SelectField(choices = [(x, x) for x in range(1, 8)],
-                        coerce=int)    
+                        coerce=int)
     submit = SubmitField('Submit')
