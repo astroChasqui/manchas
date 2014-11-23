@@ -4,6 +4,15 @@
 
 <h1>Solar Rotation</h1>
 
+{% for message in get_flashed_messages() %}
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">
+      &times;
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+
 <p>Pick a date and a number of weeks.</p>
 
 <form method="POST" class="form-inline" role="form">
@@ -29,7 +38,7 @@
 
 <br>
 
-<p><img src="{{ url_for('static', filename=gifname) }}"
+<p><img src="{{ url_for('static', filename='rotation/'+gifname) }}"
         alt="Solar Rotation" class="img-responsive"></p>
 
 <br>

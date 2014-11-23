@@ -4,8 +4,62 @@
 
 <h1>Magnetic Activity Cycle</h1>
 
+{% for message in get_flashed_messages() %}
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">
+      &times;
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+
+<p>Pick a date.</p>
+
+<form method="POST" class="form-inline" role="form">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{ form.year.label }}
+    {{ form.year(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.month.label }}
+    {{ form.month(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.day.label }}
+    {{ form.day(class="form-control") }}
+  </div>
+  {{ form.submit(class="btn btn-default") }}
+</form>
+
+<p><img src="{{ url_for('static', filename='cycle/'+ssn_img) }}"
+        alt="Sunspot number" class="img-responsive"></p>
+
+<p>On this date the international sunspot number was {{ ssnx }}.</p>
+{% if img %}
+  <p><img src="{{ img }}" class="img-responsive" alt="The Sun Today"></p>
+{% else %}
+  <p class="text-danger">No image found for this date.</p>
+{% endif %}
+
+<!--
+<div style="position: relative; left: 0; top: 0;">
+  <img src="{{ url_for('static', filename=ssn_img) }}" style="position: relative; top: 0; left: 0;" class="img-responsive"/>
+  <img src="{{ img }}" style="position: absolute; top: 10%; left: 37%; width: 22%"/>
+</div>
+-->
+
+<br>
+
 <blockquote>
   <p>{{ text[0] }}</p>
+  <footer><cite>Wikipedia</cite></footer>
+</blockquote>
+
+<blockquote>
+  {% for par in text_issn %}
+    <p>{{ par }}</p>
+  {% endfor %}
   <footer><cite>Wikipedia</cite></footer>
 </blockquote>
 
