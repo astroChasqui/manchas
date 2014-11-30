@@ -6,6 +6,8 @@ from functions import *
 from forms import DateForm
 import os
 import sqlite3
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
