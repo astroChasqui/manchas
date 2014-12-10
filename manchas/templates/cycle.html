@@ -35,7 +35,12 @@
 <p><img src="{{ url_for('static', filename='cycle/'+ssn_img) }}"
         alt="Sunspot number" class="img-responsive"></p>
 
-<p>On this date the international sunspot number was {{ ssnx }}.</p>
+{% if ssnx %}
+  <p>On this date the international sunspot number was {{ ssnx }}.</p>
+{% else %}
+  <p class="text-danger">No sunspot number found for this date.</p>
+{% endif %}
+
 {% if img %}
   <p><img src="{{ img }}" class="img-responsive" alt="The Sun Today"></p>
 {% else %}

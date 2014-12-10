@@ -65,7 +65,10 @@ def cycle():
                             'WHERE year == '+str(date.year)+\
                             ' AND month == '+str(date.month)+\
                             ' AND day == '+str(date.day))
-        ssnx = conn_cursor.fetchone()[0]
+        try:
+            ssnx = conn_cursor.fetchone()[0]
+        except:
+            ssnx = None
         conn.close()
 
         ssn_img = str(date)+'.png'
